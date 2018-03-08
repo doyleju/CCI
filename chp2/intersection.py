@@ -3,6 +3,33 @@
 from linked_list import *
 
 
+def intersect_node(longer, shorter):
+    """Function to find the intersect node of two singly linked lists.
+
+    Args:
+        longer (ListNode): linkded list head node of the longer list
+        shorter (ListNode): linkded list head node of the shorter list
+
+    Returns:
+        intersect (ListNode): node where the lists intersect
+    """
+
+    # ignore the start nodes of longer list - make lists same length
+    for _ in range(len(longer) - len(shorter)):
+        longer = longer.get_next()
+
+    # same length now so compare node by node to find the intersect node
+    while longer:
+        if longer is shorter:
+            return longer
+
+        longer = longer.get_next()
+        shorter = shorter.get_next()
+
+    # should never reach here - tails matched previously
+    return None
+
+
 def compare_lengths(head_node1, head_node2):
     """Function to compare the lengths of two singly linked lists.
 
@@ -84,17 +111,8 @@ def intersect(head_node1, head_node2):
     # need to know which list is longer
     longer, shorter = compare_lengths(head_node1, head_node2)
 
-    # ignore the start nodes of longer list - make lists same length
-    for _ in range(len(longer) - len(shorter)):
-        longer = longer.get_next()
+    # This should always return a node as tails matched earlier
+    node_i = intersect_node(longer, shorter)
 
-    # same length now so compare node by node to find the intersect node
-    while longer:
-        if longer is shorter:
-            return longer
-
-        longer = longer.get_next()
-        shorter = shorter.get_next()
-
-    # should never reach here
-    return None
+    # return the intersecting node
+    return node_i
