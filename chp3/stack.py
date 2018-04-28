@@ -19,12 +19,12 @@ class StackNode(object):
         if isinstance(value, int):
             self._value = value
         else:
-            raise ValueError('value must be an integer')
+            raise TypeError('value must be an integer')
 
         if isinstance(next_node, StackNode) or next_node is None:
             self._next = next_node
         else:
-            raise ValueError('next_node must be a StackNode or None')
+            raise TypeError('next_node must be a StackNode or None')
 
     def __str__(self):
         """Inbuilt str method for printing node value."""
@@ -44,7 +44,19 @@ class Stack(object):
     def __init__(self):
         """Initialise stack. No arguments. Top defaults to None."""
         self._top = None
-        
+
+    # Iterate through all values of the stack
+    def __iter__(self):
+        self._current = self._top
+        while self._current:
+            yield self._current.get_value()
+            self._current = self._current.get_next()
+
+    # Print values of the stack from top to bottom
+    def __str__(self):
+        self._values = [str(x) for x in (self)]
+        return '[Top] ' + ', '.join(self._values) + ' [Bottom]'
+    
     def is_empty(self):
         """Check if stack is empty. Check for presence of top node."""
         return self._top == None
@@ -61,6 +73,11 @@ class Stack(object):
         # Create a new top node linked to current top node
         self._top = StackNode(value, self._top)
         return self._top
+    
+    def pushall(self, *values):
+        """Push a list of values onto the stack."""
+        for value in values:
+            self.push(value)
         
     def pop(self):
         """Remove the top node from stack and returns its value. Raise exception if empty."""
@@ -72,5 +89,4 @@ class Stack(object):
             
             # move the top value to be the next item on the stack    
             self._top = self._top.get_next()
-            return _top_value        
-    
+            return _top_value
