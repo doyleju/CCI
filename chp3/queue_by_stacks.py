@@ -33,6 +33,28 @@ class MyQueue(object):
         # item at front of queue is on top of reversed stack 
         return self._reversed.pop()
     
+    def peek(self):
+        """Check the value at the front of the queue.
+        Args:
+            None.
+        Return:
+            self._reversed._top (int): value from the front of queue (top of reversed stack).
+        """
+        
+        # raise an Exception if both stacks are empty - no values to peek
+        if self._main.is_empty() and self._reversed.is_empty():
+            raise Empty('MyQueue is empty. Can not peek.')
+        
+        # if reversed stack is empty - node at front of queue is at bottom of main stack
+        elif self._reversed.is_empty():
+
+            while not self._main.is_empty():
+                # copy all nodes from main stack to reversed stack
+                self._reversed.push(self._main.pop())
+                
+        # item at front of queue is on top of reversed stack 
+        return self._reversed.peek()
+    
     def enqueue(self, value):
         """Add a value to the queue.
         Adds the value to the top of the main stack - which is back of the queue.
